@@ -1,4 +1,4 @@
-package server
+package consumer
 
 import shared.SmaKafkaConstants
 import org.apache.kafka.clients.consumer.Consumer
@@ -25,7 +25,7 @@ class SmaKafkaConsumer {
     }
 
     fun subscribe(onRecordArrived: (String?, String?, String?) -> Unit){
-        consumer.seekToBeginning(consumer.assignment());
+        consumer.seekToBeginning(consumer.assignment())
         consumer.subscribe(listOf(SmaKafkaConstants.SMA_TOPIC))
 
         while (true) {

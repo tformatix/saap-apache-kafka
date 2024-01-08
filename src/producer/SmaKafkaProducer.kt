@@ -1,4 +1,4 @@
-package client
+package producer
 
 import shared.SmaKafkaConstants
 import org.apache.kafka.clients.producer.KafkaProducer

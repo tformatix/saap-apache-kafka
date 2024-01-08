@@ -1,4 +1,4 @@
-package server
+package consumer
 
 fun main() {
     val smaKafkaConsumer = SmaKafkaConsumer()
