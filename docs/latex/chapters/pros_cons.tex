@@ -1,0 +1,9 @@
+\section{Limitations}
+\label{cha:pros_cons}
+
+Kafka offers significant benefits, but it is also important to consider its limitations before adaption.
+
+Kafka's core functionality does not provide comprehensive monitoring capabilities, requiring additional tools or custom implementations. Kafka's append-only nature hinders message modification or deletion after they have been produced. While Kafka offers high throughput and low latency, it may not be ideal for applications demanding sub-millisecond response times due to internal overhead. Kafka's distributed architecture and network reliance make it vulnerable to network disruptions. MQTT may be a better choice for scenarios with large client numbers (tens of thousands) due to its lightweight protocol and efficient handling of many connections.
+Kafka is designed for high throughput of small messages; while larger messages are supported, efficiency is maximized with small payloads \cite{Pacheco2023}.
+
+For the specific use case of energy data, storing all data may not be feasible due to privacy concerns. In addition, Kafka is not well suited for this application due to the frequent measurements in network-constrained environments. MQTT would be a better choice for these scenarios as it is optimized for resource-constrained devices. Furthermore, Kafka's extensive fault tolerance overhead for energy data is unnecessary as the loss of a single data point is not significant.

@@ -1,0 +1,14 @@
+\section{Kafka APIs}
+\label{cha:api}
+
+The functionality of Kafka is provided via a language-independent protocol, with clients available for many programming languages. The main Kafka project only maintains the Java clients, the others are available as part of other independent open source projects \cite{shapira2021kafka}. Therefore, Kotlin, which runs on the Java Virtual Machine (JVM), was used for the practical example in this paper. Java can be used from Kotlin and vice versa.
+
+Kafka comprises five core APIs \cite{shapira2021kafka}:
+
+\begin{enumerate}
+    \item Producer API: Send data streams to Kafka topics.
+    \item Consumer API: Read data streams from Kafka topics.
+    \item Streams API: Transform data streams from one topic to another.
+    \item Connect API: Build connectors for data transfer between Kafka and external systems.
+    \item Admin API: Manage and monitor Kafka cluster components.
+\end{enumerate}

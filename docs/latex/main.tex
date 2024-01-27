@@ -1,0 +1,86 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle={\color[HTML]{629755}\ttfamily},
+  emph={value, onValueChange, modifier, topBar, horizontalAlignment, vertical},
+  emphstyle={\color[HTML]{467CDA}},
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, FROM, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiveris, reified, return, return@, sealed, SELECT, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle={\color[HTML]{CC7832}},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Deprecated, @Composable, @Query, @Insert, @Dao, OnConflictStrategy},
+  ndkeywordstyle={\color[HTML]{BBB529}},
+  sensitive=true,
+  stringstyle={\color[HTML]{6A8759}\ttfamily},
+  classoffset=2,
+  morekeywords={padding, verticalScroll, items, NavHost, composable, fillMaxSize},
+  keywordstyle={\color[HTML]{FFC66D}\itshape},
+  classoffset=3,
+  morekeywords={REPLACE, CenterHorizontally},
+  keywordstyle={\color[HTML]{9876AA}}
+}
+
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Real-time data processing with Apache Kafka}
+
+\author{
+    \IEEEauthorblockN{Tobias Fischer, BSc}
+    \IEEEauthorblockA{
+        University of Applied Sciences Upper Austria \\
+        Faculty for Informatics, Communications and Media\\
+        Department for Smart and Interconnected Living\\
+        Master's program in Mobile Computing \\
+        4232 Hagenberg, Austria\\
+        tobias.fischer@fh-hagenberg.at
+    }
+}
+
+\maketitle
+
+\begin{abstract}
+Apache Kafka is an open-source distributed stream processing platform commonly used for high-performance data pipelines, streaming analytics, and event-driven applications. This paper provides a comprehensive overview of Kafka, covering key concepts, features, use cases, APIs and architecture. In addition, the integration of Kafka with MQTT for IoT applications is explored, accompanied by a practical implementation of real-time energy data streaming. This real-world example effectively demonstrates the practical application of Kafka in the field of IoT-driven solutions. Finally, the possibilities and limitations of Apache Kafka were discussed and an insight was given into when this powerful event streaming platform should and should not be used.
+
+\end{abstract}
+
+% https://books.google.at/books?hl=de&lr=&id=NMtMEAAAQBAJ&oi=fnd&pg=PP1&dq=kafka+architecture&ots=HZOImWiCQc&sig=WcHcsZasRYxgFq_y31z4mMgWZzI#v=onepage&q=kafka%20architecture&f=false
+% Chapter: Meet Kafka
+
+\input{chapters/introduction}
+\input{chapters/event-streaming}
+\input{chapters/functionality}
+\input{chapters/use-cases}
+\input{chapters/api}
+\input{chapters/mqtt}
+\input{chapters/practical}
+\input{chapters/pros_cons}
+\input{chapters/conclusion}
+
+\graphicspath{{images/}}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references} % Biblatex-Literaturdatei (references.bib)
+
+\end{document}
