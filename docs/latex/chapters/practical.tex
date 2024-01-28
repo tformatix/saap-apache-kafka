@@ -38,7 +38,7 @@ First of all, the MQTT broker must be set up on the local device. In this exampl
 $ sudo apt-get install mosquitto
 \end{lstlisting}
 
-\subsubsection{Create config file} The MQTT broker requires a configuration file in order to start properly. This file specifies that it should start with default MQTT port 1883 and allow anonymous access. Mosquitto also supports authentication with username and password, but this is not necessary in this case. The configuration file named \lstinline{mosquitto.conf} looks like this:
+\subsubsection{Create config file} The MQTT broker requires a configuration file in order to start properly. This file specifies that it should start with default MQTT port 1883 and allow anonymous access. Mosquitto also supports authentication with username and password, but this is not necessary in this case \cite{mosquitto}. The configuration file named \lstinline{mosquitto.conf} looks like this:
 
 \begin{lstlisting}
 listener 1883
@@ -66,16 +66,16 @@ After starting the broker, the smart meter adapter must send its data to a speci
 
 For demonstration purposes, the local device hosts the Kafka server. In a real-world deployment, however, the Kafka server would be deployed on a remote server or even in a cluster of servers to handle the high volume of data from a large number of smart meters. This enables the application to scale effectively to support a vast network of smart meters.
 
-\subsubsection{Download Apache Kafka} Kafka is available in various versions for download from the official Apache Kafka website: \url{https://kafka.apache.org/downloads}. Once the desired version has been selected, the archive must be downloaded and then unpacked in a suitable location on the system. If the Kafka directory is not contained in the system's PATH environment variable, the following setup commands in this section must be executed within the unpacked Kafka directory.
+\subsubsection{Download Apache Kafka} Kafka is available for download in different versions on the official Apache Kafka website: \url{https://kafka.apache.org/downloads}. Once the desired version has been selected, the archive must be downloaded and then unpacked in a suitable location on the system. If the Kafka directory is not contained in the system's PATH environment variable, the following setup commands in this section must be executed within the unpacked Kafka directory.
 
-\subsubsection{Generate a Cluster UUID (Universally Unique ID)} The cluster ID serves as a unique identifier for a Kafka cluster, enabling all nodes within that cluster to recognize each other and collaborate effectively by sharing consistent data and configurations. In this case, a random ID is created, but if there are several instances in the cluster, they must share this ID. The generation of the ID works as follows:
+\subsubsection{Generate a Cluster UUID (Universally Unique ID)} The cluster ID serves as a unique identifier for a Kafka cluster, enabling all nodes within that cluster to recognize each other and collaborate effectively by sharing consistent data and configurations. In this case, a random ID is created, but if there are several instances in the cluster, they must share this ID \cite{shapira2021kafka}. The generation of the ID works as follows:
 
 \begin{lstlisting}[language=bash]
 $ KAFKA_CLUSTER_ID=\\
     "$(bin/kafka-storage.sh random-uuid)"
 \end{lstlisting}
 
-\subsubsection{Format Log Directories} To ensure proper initialization and readiness of the Kafka data directories for storing new data, it is essential to format the entire data directory, i.e. to capture all partitions, replicas and associated data structures. This comprehensive formatting procedure also deletes all existing data and allows the cluster to reboot, avoiding potential complications due to corrupted or outdated data. The configuration of the Kafka cluster remains unchanged from the default settings. The formatting process can be performed with the following command:
+\subsubsection{Format Log Directories} To ensure proper initialization and readiness of the Kafka data directories for storing new data, it is essential to format the entire data directory, i.e. to capture all partitions, replicas and associated data structures. This comprehensive formatting procedure also deletes all existing data and allows the cluster to reboot, avoiding potential complications due to corrupted or outdated data \cite{shapira2021kafka}. The configuration of the Kafka cluster remains unchanged from the default settings. The formatting process can be performed with the following command:
 
 \begin{lstlisting}[language=bash]
 $ bin/kafka-storage.sh format \\
@@ -106,7 +106,7 @@ The MQTT consumer uses the package \lstinline{org.eclipse.paho.client.mqttv3}. A
 
 \paragraph{SmaKafkaProducer}
 
-The code for the producer class is shown in Figure \ref{fig:producer}. When the class is initialized, a Kafka producer object is created with its properties. These properties include the bootstrap servers, i.e. the initial hosts that the Kafka client uses to find other servers in the cluster. In this example, only one server is running locally, so the bootstrap servers are set to \lstinline{localhost:9092}. Kafka can transmit more than just simple strings, but other objects must be serialized before they can be sent. The serializer and deserializer are responsible for converting objects from one format to another. In this case, the key is simply the name entered in the adapter's web interface and the value is the entire JSON payload. Therefore, only one \lstinline{StringSerializer} is needed.
+The code for the producer class is shown in Figure \ref{fig:producer}. When the class is initialized, a Kafka producer object is created with its properties. These properties include the bootstrap servers, i.e. the initial hosts that the Kafka client uses to find other servers in the cluster \cite{kafkaDoc}. In this example, only one server is running locally, so the bootstrap servers are set to \lstinline{localhost:9092}. Kafka can transmit more than just simple strings, but other objects must be serialized before they can be sent. The serializer and deserializer are responsible for converting objects from one format to another. In this case, the key is simply the name entered in the adapter's web interface and the value is the entire JSON payload. Therefore, only one \lstinline{StringSerializer} is needed.
 
 The \lstinline{produce} method sends a new event to the Kafka stream. A \lstinline{ProducerRecord} object is created that specifies the topic (in this case \lstinline{sma-kafka}) as well as the key and value for the event. Finally, the record is sent to the Kafka cluster.
 
@@ -121,11 +121,11 @@ The \lstinline{produce} method sends a new event to the Kafka stream. A \lstinli
 
 In addition to the producer, the \lstinline{SmaKafkaConsumer} class requires two other properties: a group ID and an offset. The implementation of the class can be seen in Figure \ref{fig:consumer}.
 
-Kafka groups consumers in order to distribute the processing load evenly. One or more partitions are assigned to each consumer so that it can concentrate on specific message streams. Within a group, the partitions are distributed among the consumers to avoid overloading a single instance. In this example, the group ID is generated randomly as there is only one consumer.
+Kafka groups consumers in order to distribute the processing load evenly. One or more partitions are assigned to each consumer so that it can concentrate on specific message streams. Within a group, the partitions are distributed among the consumers to avoid overloading a single instance \cite{shapira2021kafka}. In this example, the group ID is generated randomly as there is only one consumer.
 
-The configuration for resetting the automatic offset determines when Kafka starts reading events from the topic. There are two options available: \lstinline{earliest}, which instructs Kafka to start at the beginning of the event stream, and \lstinline{latest}, which restricts Kafka to only process new events. In this case, the \lstinline{earliest} option is used.
+The configuration for resetting the automatic offset determines when Kafka starts reading events from the topic. There are two options available: \lstinline{earliest}, which instructs Kafka to start at the beginning of the event stream, and \lstinline{latest}, which restricts Kafka to only process new events \cite{kafkaDoc}. In this case, the \lstinline{earliest} option is used.
 
-The \lstinline{seekToBeginning} method ensures that Kafka retrieves all previously stored events before the consumer starts. The consumer then subscribes to the \lstinline{sma-kafka} topic and enters an infinite loop. Within the loop, the consumer polls for events for one second and then runs through all data records recorded during this time interval.
+The \lstinline{seekToBeginning} method ensures that Kafka retrieves all previously stored events before the consumer starts \cite{kafkaDoc}. The consumer then subscribes to the \lstinline{sma-kafka} topic and enters an infinite loop. Within the loop, the consumer polls for events for one second and then runs through all data records recorded during this time interval.
 
 \begin{figure}[ht]
     \centering
