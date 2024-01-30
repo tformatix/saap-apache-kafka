@@ -53,7 +53,7 @@ $ mosquitto -c mosquitto.conf
 
 \subsection{Connect Smart Meter Adapter}
 
-After starting the broker, the smart meter adapter must send its data to a specific topic. As shown in Figure \ref{fig:sma}, several parameters must be entered. Firstly, the protocol must be determined. As the configured broker does not support encrypted connections, \lstinline{TCP-mqtt} is used. The host name of the local device must be entered in the Broker field, in this case \lstinline{192.168.68.31}. As specified in the configuration file, port 1883 is intended for the broker. In addition, a unique client ID is required for MQTT, which ensures a unique assignment to a specific broker. Redundancies are irrelevant, as the system automatically assigns a new ID in such cases. Finally, a topic must be specified in order to subscribe to it later. Specifically, a simple theme called \lstinline{sma} was used.
+After starting the broker, the smart meter adapter must send its data to a specific topic. As shown in Figure \ref{fig:sma}, several parameters must be entered. Firstly, the protocol must be determined. As the configured broker does not support encrypted connections, \lstinline{TCP-mqtt} is used. The host name of the local device must be entered in the Broker field, in this case \lstinline{192.168.68.31}. As specified in the configuration file, port 1883 is intended for the broker. In addition, a unique client ID is required for MQTT, which ensures a unique assignment to a specific broker. Redundancies are irrelevant, as the system automatically assigns a new ID in such cases. Finally, a topic must be specified in order to subscribe to it later. Specifically, a simple topic called \lstinline{sma} was used.
 
 \begin{figure}[ht]
     \centering
@@ -94,7 +94,7 @@ $ bin/kafka-server-start.sh \\
 
 With the completion of the initial setup procedures, it is now possible to proceed to the implementation phase of the project. The implementation details of this project are publicly available on GitHub at \url{https://github.com/tformatix/saap-apache-kafka}.
 
-The system is based on a producer-consumer architecture, with the producer running on the local device to collect energy data and the consumer running on another device, e.g. a mobile app, to visualize the data.
+The system is based on a producer-consumer architecture, with the producer running on the local device to collect energy data and the consumer running on another device, e.g. a mobile app, to visualize the data. The consumer also runs on the local device in this showcase.
 
 \subsubsection{Kafka Producer}
 
@@ -106,7 +106,7 @@ The MQTT consumer uses the package \lstinline{org.eclipse.paho.client.mqttv3}. A
 
 \paragraph{SmaKafkaProducer}
 
-The code for the producer class is shown in Figure \ref{fig:producer}. When the class is initialized, a Kafka producer object is created with its properties. These properties include the bootstrap servers, i.e. the initial hosts that the Kafka client uses to find other servers in the cluster \cite{kafkaDoc}. In this example, only one server is running locally, so the bootstrap servers are set to \lstinline{localhost:9092}. Kafka can transmit more than just simple strings, but other objects must be serialized before they can be sent. The serializer and deserializer are responsible for converting objects from one format to another. In this case, the key is simply the name entered in the adapter's web interface and the value is the entire JSON payload. Therefore, only one \lstinline{StringSerializer} is needed.
+The code for the producer class is shown in Figure \ref{fig:producer}. When the class is initialized, a Kafka producer object is created with its properties. These properties include the bootstrap servers, i.e. the initial hosts that the Kafka client uses to find other servers in the cluster \cite{kafkaDoc}. In this example, only one server is running locally, so the bootstrap servers are set to \lstinline{localhost:9092}. Kafka can transmit more than just simple strings, but other objects must be serialized before they can be sent. The serializer and deserializer are responsible for converting objects from one format to another. In this case, the key is simply the name entered in the adapter's web interface and the value is the entire JSON payload. Therefore, only a \lstinline{StringSerializer} is needed.
 
 The \lstinline{produce} method sends a new event to the Kafka stream. A \lstinline{ProducerRecord} object is created that specifies the topic (in this case \lstinline{sma-kafka}) as well as the key and value for the event. Finally, the record is sent to the Kafka cluster.
 
